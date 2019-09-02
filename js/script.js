@@ -161,7 +161,9 @@ const validateName = () => {
     $name.css('border','2px solid red');
     $name.after("<span class='name-error-message'>Please enter your full name</span>");
     $('.name-error-message').css('color','red');
+    return false;
   }
+  return true;
 }
 
 //--------Email validation--------
@@ -177,7 +179,9 @@ const validateEmail = () => {
     $email.css('border','2px solid red');
     $email.after(`<span class='invalid-email-message'>${errorMessage}</span>`);
     $('.invalid-email-message').css('color','red');
+    return false;
   }
+  return true;
 }
 
 //--------Activity validation--------
@@ -195,7 +199,9 @@ const validateActivity = () => {
     const activityErrorMessage = 'Please select at least one activity'
     $('.activities').after(`<span class='invalid-activity-message'>${activityErrorMessage}</span>`)
     $('.invalid-activity-message').css('color','red');
+    return false;
   }
+  return true;
 }
   //------ Payment validation----------
   //validate the fields for credit card
@@ -208,7 +214,9 @@ const validateCreditCard = () => {
     $('#cc-num').after(`<span class='invalid-card-message'>${cardErrorMessage}</span>`)
     $('.invalid-card-message').css('color','red');
     $('#cc-num').css('border','2px solid red');
+    return false;
   }
+  return true;
 }
 
 const validateZipCode = () => {
@@ -220,7 +228,9 @@ const validateZipCode = () => {
     $('#zip').after(`<span class='invalid-zip-message'>${zipErrorMessage}</span>`)
     $('.invalid-zip-message').css('color','red');
     $('#zip').css('border','2px solid red');
+    return false;
   }
+  return true;
 }
 
 const validateCvv = () => {
@@ -232,20 +242,37 @@ const validateCvv = () => {
     $('#cvv').after(`<span class='invalid-cvv-message'>${cvvErrorMessage}</span>`)
     $('.invalid-cvv-message').css('color','red');
     $('#cvv').css('border','2px solid red');
+    return false;
   }
+  return true;
 }
 
 // When user hits the registor(submit) button then the required error messages are added or removed based on the input validation
 $('form').on('submit', (event) => {
-  event.preventDefault();
-  validateName();
-  validateEmail();
-  validateActivity();
+  let isFormValid = true;
+  if (!validateName()) {
+    isFormValid = false;
+  }
+  if (!validateEmail()) {
+    isFormValid = false;
+  }
+  if (!validateActivity()) {
+    isFormValid = false;
+  }
 
   if ($('#payment').val().toLowerCase() === 'credit card') {
-    validateCreditCard();
-    validateZipCode();
-    validateCvv();
+    if (!validateCreditCard()) {
+      isFormValid = false;
+    }
+    if (!validateZipCode()) {
+      isFormValid = false;
+    }
+    if (!validateCvv()) {
+      isFormValid = false;
+    }
+  }
+  if (!isFormValid) {
+    event.preventDefault();
   }
 });
 
